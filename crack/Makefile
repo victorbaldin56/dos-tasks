@@ -2,7 +2,7 @@
 CXX = g++
 # Flags
 
-#DEBUG = 1
+#DEBUG = 
 
 ifdef DEBUG
 FLAGS = -D _DEBUG -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++ \
@@ -35,7 +35,7 @@ FLAGS = -D _DEBUG -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++ \
 	integer-divide-by-zero,leak,nonnull-attribute,null,object-size,return,$\
 	returns-nonnull-attribute,$\
 	shift,signed-integer-overflow,undefined,unreachable,vla-bound,vptr
-endif
+else
 
 FLAGS = -D NDEBUG -O3 -Wall -Wextra -Weffc++ \
 	-Waggressive-loop-optimizations \
@@ -58,7 +58,9 @@ FLAGS = -D NDEBUG -O3 -Wall -Wextra -Weffc++ \
 	-Wvariadic-macros -Wno-literal-suffix -Wno-missing-field-initializers \
 	-Wno-narrowing \
 	-Wno-old-style-cast -Wno-varargs -Wstack-protector -fcheck-new \
-	-fsized-deallocation \
+	-fsized-deallocation
+
+endif
 
 SRC_DIRS = src
 BUILD_DIR = build
