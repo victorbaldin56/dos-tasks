@@ -21,7 +21,7 @@ const unsigned char nop_opcode = 0x90;
  * @brief Permormes crack on buffer.
  * @param buffer The buffer with COM file contents.
  * @param size   Size of the buffer.
- * @return bool flag.
+ * @return bool is_patched.
  *
  * Simply finds the first JNE instruction in the buffer & replaces it and its 
  * operand by NOP.
@@ -32,7 +32,7 @@ bool patch_com_file(const char input_file[]) {
     assert(input_file != nullptr);
 
     FILE* output = nullptr;
-    bool flag = true;
+    bool is_patched = true;
 
     struct stat stbuf{};
     if (stat(input_file, &stbuf) == -1) {
@@ -50,7 +50,7 @@ bool patch_com_file(const char input_file[]) {
     unsigned char* buffer = (unsigned char*)calloc(input_size, sizeof(*buffer));
     if (buffer == nullptr) {
         perror("alloc");
-        flag = false;
+        is_patched = false;
         goto exit;
     }
 
@@ -58,14 +58,14 @@ bool patch_com_file(const char input_file[]) {
     if (!patch_buffer(buffer, input_size)) {
         fprintf(stderr, 
             "Error: JNE not found, this file does not seem to be crackable\n");
-        flag = false;
+        is_patched = false;
         goto exit;
     }
 
     output = fopen("crack.com", "w");
     if (output == nullptr) {
         perror("fopen");
-        flag = false;
+        is_patched = false;
         goto exit;
     }
 
@@ -74,7 +74,7 @@ bool patch_com_file(const char input_file[]) {
 exit:
     fclose(input);
     free(buffer);
-    return flag;
+    return is_patched;
 }
 
 static bool patch_buffer(unsigned char* buffer, size_t size) {
